@@ -3,29 +3,43 @@ package scala_tryouts
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
-import scalafx.geometry.Insets
+import scalafx.scene.Group
+import scalafx.scene.PerspectiveCamera
+import scalafx.scene.PointLight
 import scalafx.scene.Scene
+import scalafx.scene.SubScene
 import scalafx.scene.control.Button
-import scalafx.scene.effect.DropShadow
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.HBox
-import scalafx.scene.paint.Color._
-import scalafx.scene.paint.{LinearGradient, Stops}
-import scalafx.scene.text.Text
+import scalafx.scene.paint.Color.AntiqueWhite
+import scalafx.scene.paint.Color.Black
+import scalafx.scene.paint.Color.Blue
+import scalafx.scene.paint.Color.LightBlue
+import scalafx.scene.paint.Color.sfxColor2jfx
+import scalafx.scene.paint.PhongMaterial
+import scalafx.scene.shape.Sphere
 import scalafx.stage.Stage
+import scalafx.scene.SceneAntialiasing
+import scalafx.scene.transform.Rotate
+import scalafx.scene.shape.Box
+import scalafx.scene.paint.Color
 
-class ScalaScene extends HBox {
-  children = new Text {
-    padding = Insets(20)
-    text = "Hello"
-    style = "-fx-font-size: 100pt"
-    fill = new LinearGradient(
-      endX = 0,
-      stops = Stops(PaleGreen, SeaGreen))
+class ScalaScene extends SubScene(1024, 768, true, SceneAntialiasing.Balanced) {
+  camera = new PerspectiveCamera(false)
+  val sphere = new Sphere(100.0) {
+    material = new PhongMaterial {
+      diffuseColor = Color.Blue
+      specularColor = Color.White
+    }
+    translateX = 512
+    translateY = 384
+    translateZ = 0.0
   }
+  
+  root = new Group(sphere)
 }
 
-class ScalaHUD(outer: Stage) extends HBox {
+class ScalaHUD(outer : Stage) extends HBox {
   children = Seq(
     new Button {
       text = "Click me to close the dialog"
@@ -38,12 +52,15 @@ class ScalaHUD(outer: Stage) extends HBox {
   )
 }
 
-object ScalaFXHelloWorld extends JFXApp {
+object ScalaFXHelloWorld extends JFXApp {app=>
+  private final val root = new Group
+  private final val world = new Group
+  
   stage = new PrimaryStage {
     outer =>
-    title = "ScalaFX Hello World"
     scene = new Scene {
       root = new BorderPane {
+        title = "ScalaFX Tryouts"
         style = "-fx-background-color: #000000"
         center = new ScalaScene
         bottom = new ScalaHUD(outer)
