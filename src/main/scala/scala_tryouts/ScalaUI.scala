@@ -18,15 +18,21 @@ import scalafx.scene.shape.Sphere
 import scalafx.stage.Stage
 
 class ScalaScene extends SubScene(1024, 768, true, SceneAntialiasing.Balanced) {
-  camera = new PerspectiveCamera(false)
-  val sphere = new Sphere(100.0) {
+  camera = new PerspectiveCamera(true) {
+    translateZ = -1000
+    nearClip = 0.1
+    farClip = 2000
+    fieldOfView = 35
+  }
+  
+  val sphere = new Sphere(100) {
     material = new PhongMaterial {
       diffuseColor = Color.Blue
       specularColor = Color.White
     }
-    translateX = 512
-    translateY = 384
-    translateZ = 0.0
+    translateX = 0
+    translateY = 0
+    translateZ = 100
   }
   
   root = new Group(sphere)
@@ -45,7 +51,7 @@ class ScalaHUD(outer : Stage) extends HBox {
   )
 }
 
-object ScalaFXHelloWorld extends JFXApp {app=>
+object ScalaFXHelloWorld extends JFXApp {
   private final val root = new Group
   private final val world = new Group
   
