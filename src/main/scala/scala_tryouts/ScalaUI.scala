@@ -1,28 +1,21 @@
 package scala_tryouts
 
-import scalafx.Includes._
+import scalafx.Includes.handle
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Group
 import scalafx.scene.PerspectiveCamera
-import scalafx.scene.PointLight
 import scalafx.scene.Scene
+import scalafx.scene.SceneAntialiasing
 import scalafx.scene.SubScene
 import scalafx.scene.control.Button
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.HBox
-import scalafx.scene.paint.Color.AntiqueWhite
-import scalafx.scene.paint.Color.Black
-import scalafx.scene.paint.Color.Blue
-import scalafx.scene.paint.Color.LightBlue
+import scalafx.scene.paint.Color
 import scalafx.scene.paint.Color.sfxColor2jfx
 import scalafx.scene.paint.PhongMaterial
 import scalafx.scene.shape.Sphere
 import scalafx.stage.Stage
-import scalafx.scene.SceneAntialiasing
-import scalafx.scene.transform.Rotate
-import scalafx.scene.shape.Box
-import scalafx.scene.paint.Color
 
 class ScalaScene extends SubScene(1024, 768, true, SceneAntialiasing.Balanced) {
   camera = new PerspectiveCamera(false)
