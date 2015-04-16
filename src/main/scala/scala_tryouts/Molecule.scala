@@ -1,12 +1,13 @@
 package scala_tryouts
 
-import scalafx.scene.shape.Sphere
-import scalafx.scene.shape.Cylinder
 import scalafx.scene.Group
+import scalafx.scene.paint.Color
+import scalafx.scene.paint.Color.sfxColor2jfx
 import scalafx.scene.paint.PhongMaterial
+import scalafx.scene.shape.Cylinder
+import scalafx.scene.shape.Sphere
 import scalafx.scene.transform.Rotate
 import scalafx.scene.transform.Translate
-import scalafx.scene.paint.Color
 
 class Hydrogen extends Group {
   val conn_mat = new PhongMaterial {
