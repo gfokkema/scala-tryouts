@@ -1,11 +1,14 @@
 package scala_tryouts
 
-import javafx.scene.transform.Scale
+import scala.math.Pi
+import scala.math.cos
+import scala.math.sin
+
 import scalafx.Includes.eventClosureWrapperWithParam
 import scalafx.Includes.handle
 import scalafx.Includes.jfxMouseEvent2sfx
-import scalafx.Includes.jfxScale2sfx
 import scalafx.Includes.jfxScene2sfx
+import scalafx.Includes.observableList2ObservableBuffer
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Group
@@ -16,6 +19,8 @@ import scalafx.scene.control.Button
 import scalafx.scene.input.MouseEvent
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.HBox
+import scalafx.scene.transform.Affine.sfxAffine2jfx
+import scalafx.scene.transform.Scale
 import scalafx.scene.transform.Translate
 import scalafx.stage.Stage
 
@@ -23,10 +28,16 @@ class ScalaScene(camera_node: Camera) extends SubScene(1024, 768, true, SceneAnt
   val world_node = new Group {
     children = new Axes ::
     new Water {
-      transforms = new Scale(.4, .4, .4) :: new Translate( 500, 0, 0) :: Nil
+      transforms = new Scale(.4, .4, .4) :: new Translate(0,  0,  1000) :: Nil
     } ::
     new Water {
-      transforms = new Scale(.4, .4, .4) :: new Translate(-500, 0, 0) :: Nil
+      transforms = new Scale(.4, .4, .4) :: new Translate(0,  0, -1000) :: Nil
+    } ::
+    new Water {
+      transforms = new Scale(.4, .4, .4) :: new Translate(0,  1000,  0) :: Nil
+    } ::
+    new Water {
+      transforms = new Scale(.4, .4, .4) :: new Translate(0, -1000,  0) :: Nil
     } :: Nil
   }
   root = new Group(camera_node, world_node)
@@ -44,7 +55,7 @@ class ScalaHUD(outer : Stage) extends HBox {
   } :: Nil
 }
 
-object ScalaFXHelloWorld extends JFXApp {
+object ScalaUI extends JFXApp {
   private var mousePosX: Double = .0
   private var mousePosY: Double = .0
   private var mouseOldX: Double = .0
@@ -73,6 +84,8 @@ object ScalaFXHelloWorld extends JFXApp {
       mouseOldX = me.sceneX
       mouseOldY = me.sceneY
       println("(" + mousePosX + ", " + mousePosY + ")")
+      val f = 90.0 / 180 * Pi
+      camera_node.transforms += Quaternion(sin(f / 2), 0, 0, cos(f / 2)).toTransform
     }
     scene.onMouseDragged = (me: MouseEvent) => {
       mouseOldX = mousePosX
@@ -81,8 +94,8 @@ object ScalaFXHelloWorld extends JFXApp {
       mousePosY = me.sceneY
       mouseDeltaX = mousePosX - mouseOldX
       mouseDeltaY = mousePosY - mouseOldY
-      camera_node.rx.angle() -= mouseDeltaY
-      camera_node.ry.angle() += mouseDeltaX
+//      camera_node.rx.angle() -= mouseDeltaY
+//      camera_node.ry.angle() += mouseDeltaX
     }
   }
 }
