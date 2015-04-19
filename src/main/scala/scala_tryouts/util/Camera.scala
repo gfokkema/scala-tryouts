@@ -1,5 +1,6 @@
-package scala_tryouts
+package scala_tryouts.util
 
+import scala_tryouts.Quaternion
 import scalafx.scene.PerspectiveCamera
 import scalafx.scene.transform.Translate
 

@@ -3,58 +3,19 @@ package scala_tryouts
 import scala.math.cos
 import scala.math.sin
 
+import scala_tryouts.util.Camera
+import scala_tryouts.view.HUD
+import scala_tryouts.view.World
 import scalafx.Includes.eventClosureWrapperWithParam
-import scalafx.Includes.handle
 import scalafx.Includes.jfxMouseEvent2sfx
 import scalafx.Includes.jfxScene2sfx
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
-import scalafx.geometry.Insets
 import scalafx.geometry.Point3D.sfxPoint3D2jfx
-import scalafx.geometry.Pos
-import scalafx.scene.Group
 import scalafx.scene.Scene
-import scalafx.scene.SceneAntialiasing
-import scalafx.scene.SubScene
-import scalafx.scene.control.Button
 import scalafx.scene.input.MouseEvent
 import scalafx.scene.input.MouseEvent.sfxMouseEvent2jfx
 import scalafx.scene.layout.BorderPane
-import scalafx.scene.layout.HBox
-import scalafx.scene.layout.Priority
-import scalafx.scene.transform.Scale
-import scalafx.scene.transform.Translate
-import scalafx.stage.Stage
-
-class ScalaScene(camera_node: Camera) extends SubScene(1024, 768, true, SceneAntialiasing.Balanced) {
-  val world_node = new Group {
-    children = new Axes ::
-    new Water {
-      transforms = new Translate(0,  0,  0) :: new Scale(.1, .1, .1) :: Nil
-    } :: Nil
-  }
-  root   = new Group(camera_node, world_node)
-  camera = camera_node
-}
-
-class ScalaHUD(outer : Stage) extends HBox {
-  children = new HBox {
-    alignment = Pos.Center
-    hgrow     = Priority.Always
-    padding   = Insets(15, 12, 15, 12)
-    spacing   = 10
-    style     = "-fx-background-color: #336699"
-    
-    children = new Button {
-      text = "Click me to close the dialog"
-      onAction = handle { outer.close() }
-    } ::
-    new Button {
-      text = "Click me to close the dialog"
-      onAction = handle { outer.close() }
-    } :: Nil
-  }
-}
 
 object ScalaUI extends JFXApp {
   private var mousePosX: Double = .0
@@ -71,8 +32,8 @@ object ScalaUI extends JFXApp {
       root = new BorderPane {
         title = "ScalaFX Tryouts"
         style = "-fx-background-color: #000000"
-        center = new ScalaScene(camera_node)
-        bottom = new ScalaHUD(outer)
+        center = new World(camera_node)
+        bottom = new HUD(outer)
       }
     }
     handlemouse(scene())
@@ -94,9 +55,13 @@ object ScalaUI extends JFXApp {
       val mouse = new Vector3D(mouseOldX - mousePosX, mouseOldY - mousePosY, 0)
       val axis = mouse.norm % new Vector3D(0, 0, 1)
       if (me.isPrimaryButtonDown)
-        camera_node.q *= new Quaternion(axis * sin(mouse.magnitude * .01), cos(mouse.magnitude * .01))
-      if (me.isMiddleButtonDown)
-        camera_node.t.z.value = camera_node.t.z.value + mouse.y
+        camera_node.q *= Quaternion(axis * sin(mouse.magnitude * .01), cos(mouse.magnitude * .01))
+      if (me.isMiddleButtonDown) {
+        val translation = camera_node.q * Vector3D(0, 0, 1) * mouse.y
+        camera_node.t.x.value = camera_node.t.x.value + translation.x
+        camera_node.t.y.value = camera_node.t.y.value + translation.y
+        camera_node.t.z.value = camera_node.t.z.value + translation.z
+      }
     }
   }
 }
