@@ -1,5 +1,7 @@
 package scala_tryouts
 
+import scala.math.abs
+
 import javafx.{geometry => jfxg}
 import scalafx.geometry.Point3D
 import scalafx.geometry.Point3D.sfxPoint3D2jfx
@@ -20,4 +22,9 @@ class Vector3D(override val delegate: jfxg.Point3D) extends Point3D(delegate) {
   def /(r: Double)     = new Vector3D(this.multiply(1 / r))
   def dot(r: Vector3D) = this.dotProduct(r)
   def norm             = new Vector3D(this.normalize())
+  
+  override def equals(that: Any) = that match {
+    case p: Point3D => List((x, p.x), (y, p.y), (z, p.z)).foldLeft(true)((x, y) => x && abs(y._1 - y._2) < 1E-5)
+    case _          => false
+  }
 }

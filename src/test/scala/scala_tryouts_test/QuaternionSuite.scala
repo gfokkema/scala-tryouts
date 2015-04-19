@@ -14,38 +14,34 @@ import scala_tryouts.Vector3D
 
 class QuaternionSuite extends FunSuite {
   val f = 90.0 / 180 * Pi
+  val xaxis = Quaternion(sin(f / 2) *: Vector3D(1, 0, 0), cos(f / 2))
+  val yaxis = Quaternion(sin(f / 2) *: Vector3D(0, 1, 0), cos(f / 2))
+  val zaxis = Quaternion(sin(f / 2) *: Vector3D(0, 0, 1), cos(f / 2))
   
   test("create a quaternion") {
     assert(Quaternion(1, 0, 0, 0) == Quaternion(1, 0, 0, 0))
     assert(Quaternion(1, 0, 0, 0) == Quaternion(1, 0, 0, 0).normalize)
-    assert(
-      Quaternion(sin(f / 2) *: Vector3D(1, 0, 0), cos(f / 2))
-      ==
-      Quaternion(sin(f / 2) *: Vector3D(1, 0, 0), cos(f / 2)).normalize
-    )
+    assert(xaxis == xaxis.normalize)
   }
-  
   test("x-axis: rotate 90 degrees") {
-    assert(
-      Quaternion(sin(f / 2) *: Vector3D(1, 0, 0), cos(f / 2))
-      ==
-      new Rotate(90, Rotate.XAxis)
-    )
+    assert(xaxis == new Rotate(90, Rotate.XAxis))
   }
-  
   test("y-axis: rotate 90 degrees") {
-    assert(
-      Quaternion(sin(f / 2) *: Vector3D(0, 1, 0), cos(f / 2))
-      ==
-      new Rotate(90, Rotate.YAxis)
-    )
+    assert(yaxis == new Rotate(90, Rotate.YAxis))
   }
-  
   test("z-axis: rotate 90 degrees") {
-    assert(
-      Quaternion(sin(f / 2) *: Vector3D(0, 0, 1), cos(f / 2))
-      ==
-      new Rotate(90, Rotate.ZAxis)
-    )
+    assert(zaxis == new Rotate(90, Rotate.ZAxis))
+  }
+  test("x-axis: rotate vector 90 degrees") {
+    assert(xaxis * Vector3D(1, 0, 0) == Vector3D(1, 0, 0))
+  }
+  test("y-axis: rotate vector 90 degrees") {
+    assert(yaxis * Vector3D(1, 0, 0) == Vector3D(0, 0, -1))
+  }
+  test("z-axis: rotate vector 90 degrees") {
+    assert(zaxis * Vector3D(1, 0, 0) == Vector3D(0, 1, 0))
+  }
+  test("yx-axis: rotate vector 90 degrees") {
+    assert(xaxis * yaxis * Vector3D(1, 0, 0) == Vector3D(0, 1, 0))
   }
 }

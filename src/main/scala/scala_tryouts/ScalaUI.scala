@@ -9,7 +9,9 @@ import scalafx.Includes.jfxMouseEvent2sfx
 import scalafx.Includes.jfxScene2sfx
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
+import scalafx.geometry.Insets
 import scalafx.geometry.Point3D.sfxPoint3D2jfx
+import scalafx.geometry.Pos
 import scalafx.scene.Group
 import scalafx.scene.Scene
 import scalafx.scene.SceneAntialiasing
@@ -19,6 +21,7 @@ import scalafx.scene.input.MouseEvent
 import scalafx.scene.input.MouseEvent.sfxMouseEvent2jfx
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.HBox
+import scalafx.scene.layout.Priority
 import scalafx.scene.transform.Scale
 import scalafx.scene.transform.Translate
 import scalafx.stage.Stage
@@ -35,14 +38,22 @@ class ScalaScene(camera_node: Camera) extends SubScene(1024, 768, true, SceneAnt
 }
 
 class ScalaHUD(outer : Stage) extends HBox {
-  children = new Button {
-    text = "Click me to close the dialog"
-    onAction = handle { outer.close() }
-  } ::
-  new Button {
-    text = "Click me to close the dialog"
-    onAction = handle { outer.close() }
-  } :: Nil
+  children = new HBox {
+    alignment = Pos.Center
+    hgrow     = Priority.Always
+    padding   = Insets(15, 12, 15, 12)
+    spacing   = 10
+    style     = "-fx-background-color: #336699"
+    
+    children = new Button {
+      text = "Click me to close the dialog"
+      onAction = handle { outer.close() }
+    } ::
+    new Button {
+      text = "Click me to close the dialog"
+      onAction = handle { outer.close() }
+    } :: Nil
+  }
 }
 
 object ScalaUI extends JFXApp {

@@ -30,10 +30,21 @@ final class Quaternion(var v: Vector3D, var w: Double) extends Affine {
   def this(x: Double, y: Double, z: Double, w: Double) = this(new Vector3D(x, y, z), w)
 
   // Multiply two quaternions
+  def *(q: Quaternion) = {
+    Quaternion(q.v * w + v * q.w + v % q.v,
+               w * q.w - (v dot q.v))
+  }
   def *=(q: Quaternion) = {
     w = w * q.w - (v dot q.v)
     v = q.v * w + v * q.w + v % q.v
     update
+  }
+  
+  // Multiply a quaternion and a vector 
+  def *(v: Vector3D) = {
+    val uv = this.v % v
+    val uuv = this.v % uv
+    v + uv * 2 * w + uuv * 2
   }
   
   // Scale a quaternion
