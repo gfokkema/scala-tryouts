@@ -3,19 +3,20 @@ package scala_tryouts
 import scala.math.cos
 import scala.math.sin
 
-import scala_tryouts.Vector3D.sfxPoint3D2jfx
 import scalafx.Includes.eventClosureWrapperWithParam
 import scalafx.Includes.handle
 import scalafx.Includes.jfxMouseEvent2sfx
 import scalafx.Includes.jfxScene2sfx
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
+import scalafx.geometry.Point3D.sfxPoint3D2jfx
 import scalafx.scene.Group
 import scalafx.scene.Scene
 import scalafx.scene.SceneAntialiasing
 import scalafx.scene.SubScene
 import scalafx.scene.control.Button
 import scalafx.scene.input.MouseEvent
+import scalafx.scene.input.MouseEvent.sfxMouseEvent2jfx
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.HBox
 import scalafx.scene.transform.Scale
@@ -81,7 +82,10 @@ object ScalaUI extends JFXApp {
       mousePosY = me.sceneY
       val mouse = new Vector3D(mouseOldX - mousePosX, mouseOldY - mousePosY, 0)
       val axis = mouse.norm % new Vector3D(0, 0, 1)
-      camera_node.q *= new Quaternion(axis * sin(mouse.magnitude * .01), cos(mouse.magnitude * .01))
+      if (me.isPrimaryButtonDown)
+        camera_node.q *= new Quaternion(axis * sin(mouse.magnitude * .01), cos(mouse.magnitude * .01))
+      if (me.isMiddleButtonDown)
+        camera_node.t.z.value = camera_node.t.z.value + mouse.y
     }
   }
 }

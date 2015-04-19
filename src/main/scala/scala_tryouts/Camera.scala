@@ -1,11 +1,6 @@
 package scala_tryouts
 
-import scala.math.Pi
-import scala.math.cos
-import scala.math.sin
-
 import scalafx.scene.PerspectiveCamera
-import scalafx.scene.transform.Rotate
 import scalafx.scene.transform.Translate
 
 class Camera extends PerspectiveCamera(true) {
