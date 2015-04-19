@@ -1,13 +1,13 @@
 package scala_tryouts
 
-import scala.math.Pi
 import scala.math.cos
 import scala.math.sin
+
+import scala_tryouts.Vector3D.sfxPoint3D2jfx
 import scalafx.Includes.eventClosureWrapperWithParam
-import scalafx.Includes._
+import scalafx.Includes.handle
 import scalafx.Includes.jfxMouseEvent2sfx
 import scalafx.Includes.jfxScene2sfx
-import scalafx.Includes.observableList2ObservableBuffer
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Group
@@ -18,11 +18,9 @@ import scalafx.scene.control.Button
 import scalafx.scene.input.MouseEvent
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.HBox
-import scalafx.scene.transform.Affine.sfxAffine2jfx
 import scalafx.scene.transform.Scale
 import scalafx.scene.transform.Translate
 import scalafx.stage.Stage
-import scalafx.geometry.Point3D
 
 class ScalaScene(camera_node: Camera) extends SubScene(1024, 768, true, SceneAntialiasing.Balanced) {
   val world_node = new Group {
@@ -30,17 +28,8 @@ class ScalaScene(camera_node: Camera) extends SubScene(1024, 768, true, SceneAnt
     new Water {
       transforms = new Translate(0,  0,  0) :: new Scale(.1, .1, .1) :: Nil
     } :: Nil
-//    new Water {
-//      transforms = new Scale(.4, .4, .4) :: new Translate(0,  0, -1000) :: Nil
-//    } ::
-//    new Water {
-//      transforms = new Scale(.4, .4, .4) :: new Translate(0,  1000,  0) :: Nil
-//    } ::
-//    new Water {
-//      transforms = new Scale(.4, .4, .4) :: new Translate(0, -1000,  0) :: Nil
-//    } :: Nil
   }
-  root = new Group(camera_node, world_node)
+  root   = new Group(camera_node, world_node)
   camera = camera_node
 }
 
@@ -84,20 +73,15 @@ object ScalaUI extends JFXApp {
       mouseOldX = me.sceneX
       mouseOldY = me.sceneY
       println("(" + mousePosX + ", " + mousePosY + ")")
-      val mouse = new Point3D(1, 1, 0)
-      val axis = mouse.normalize.crossProduct(0, 0, 1)
-      camera_node.q *= new Quaternion(axis.multiply(sin(mouse.magnitude * .1)), cos(mouse.magnitude * .1))
     }
     scene.onMouseDragged = (me: MouseEvent) => {
       mouseOldX = mousePosX
       mouseOldY = mousePosY
       mousePosX = me.sceneX
       mousePosY = me.sceneY
-      val mouse = new Point3D(mouseOldX - mousePosX, mouseOldY - mousePosY, 0)
-      val axis = mouse.normalize.crossProduct(0, 0, 1)
-      camera_node.q *= new Quaternion(axis.multiply(sin(mouse.magnitude * .01)), cos(mouse.magnitude * .01))
-//      camera_node.rx.angle() -= mouseDeltaY
-//      camera_node.ry.angle() += mouseDeltaX
+      val mouse = new Vector3D(mouseOldX - mousePosX, mouseOldY - mousePosY, 0)
+      val axis = mouse.norm % new Vector3D(0, 0, 1)
+      camera_node.q *= new Quaternion(axis * sin(mouse.magnitude * .01), cos(mouse.magnitude * .01))
     }
   }
 }

@@ -1,46 +1,39 @@
 package scala_tryouts
 
-import scalafx.Includes._
-import scalafx.geometry.Point3D
-import scalafx.geometry.Point3D._
+import scala_tryouts.Vector3D.sfxPoint3D2jfx
 import scalafx.scene.transform.Affine
-import scalafx.beans.property.ObjectProperty
-import scalafx.beans.property.DoubleProperty
-import scalafx.scene.transform.MatrixType
 
 object Quaternion {
   // Quaternion constants
-  val Identity = new Quaternion(Point3D.Zero, 1.0)
-  val Zero     = new Quaternion(Point3D.Zero, 0.0)
+  val Identity = new Quaternion(Vector3D.Zero, 1.0)
+  val Zero     = new Quaternion(Vector3D.Zero, 0.0)
 
   // Create a quaternion
-  def apply(v: Point3D, w: Double) = new Quaternion(v, w)
+  def apply(v: Vector3D, w: Double) = new Quaternion(v, w)
 
   // Create a quaternion from components
-  def apply(x: Double, y: Double, z: Double, w: Double) = new Quaternion(new Point3D(x, y, z), w)
+  def apply(x: Double, y: Double, z: Double, w: Double) = new Quaternion(new Vector3D(x, y, z), w)
 
   // Extractor method
   def unapply(q: Quaternion) = Some(q.v, q.w)
 }
 
-final class Quaternion(var v: Point3D, var w: Double) extends Affine {
+final class Quaternion(var v: Vector3D, var w: Double) extends Affine {
   update
   
   // Create a quaternion from components
-  def this(x: Double, y: Double, z: Double, w: Double) = this(new Point3D(x, y, z), w)
+  def this(x: Double, y: Double, z: Double, w: Double) = this(new Vector3D(x, y, z), w)
 
   // Multiply two quaternions
   def *=(q: Quaternion) = {
-    w = w * q.w - v.dotProduct(q.v)
-    v = new Point3D(w * q.v.x  +  v.x * q.w    +  v.y * q.v.z  -  v.z * q.v.y,
-                    w * q.v.y  -  v.x * q.v.z  +  v.y * q.w    +  v.z * q.v.x,
-                    w * q.v.z  +  v.x * q.v.y  -  v.y * q.v.x  +  v.z * q.w)
+    w = w * q.w - (v dot q.v)
+    v = q.v * w + v * q.w + v % q.v
     update
   }
   
   // Scale a quaternion
-  def *(f: Double) = new Quaternion(v.multiply(    f), w * f)
-  def /(f: Double) = new Quaternion(v.multiply(1 / f), w / f)
+  def *(f: Double) = new Quaternion(v * f, w * f)
+  def /(f: Double) = new Quaternion(v / f, w / f)
   
   // Length
   def length             = math.sqrt(lengthSquared)
@@ -56,7 +49,7 @@ final class Quaternion(var v: Point3D, var w: Double) extends Affine {
 
   def update = {
     val length = this.length;
-    v = v.multiply(1 / length)
+    v = v / length
     w = w / length
     
     // http://www.cprogramming.com/tutorial/3d/quaternions.html
