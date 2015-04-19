@@ -62,6 +62,13 @@ object ScalaUI extends JFXApp {
         camera_node.t.y.value = camera_node.t.y.value + translation.y
         camera_node.t.z.value = camera_node.t.z.value + translation.z
       }
+      if (me.isSecondaryButtonDown()) {
+        val translation = camera_node.q * Vector3D(1, 0, 0) * mouse.x +
+                          camera_node.q * Vector3D(0, 1, 0) * mouse.y
+        camera_node.t.x.value = camera_node.t.x.value + translation.x
+        camera_node.t.y.value = camera_node.t.y.value + translation.y
+        camera_node.t.z.value = camera_node.t.z.value + translation.z
+      }
     }
   }
 }
