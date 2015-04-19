@@ -93,7 +93,7 @@ object ScalaUI extends JFXApp {
       mouseOldY = mousePosY
       mousePosX = me.sceneX
       mousePosY = me.sceneY
-      val mouse = new Point3D(mousePosX - mouseOldX, mousePosY - mouseOldY, 0)
+      val mouse = new Point3D(mouseOldX - mousePosX, mouseOldY - mousePosY, 0)
       val axis = mouse.normalize.crossProduct(0, 0, 1)
       camera_node.q *= new Quaternion(axis.multiply(sin(mouse.magnitude * .01)), cos(mouse.magnitude * .01))
 //      camera_node.rx.angle() -= mouseDeltaY
