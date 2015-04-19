@@ -55,6 +55,7 @@ final class Quaternion(var v: Point3D, var w: Double) extends Affine {
 //  def axis = v.normalize
 
   def update = {
+    val length = this.length;
     v = v.multiply(1 / length)
     w = w / length
     
@@ -64,8 +65,8 @@ final class Quaternion(var v: Point3D, var w: Double) extends Affine {
     val wx = v.x * w; val wy = v.y * w; val wz = v.z * w
     
     mxx = 1 - 2 * yy - 2 * zz;  mxy =     2 * xy - 2 * wz;  mxz =     2 * xz + 2 * wy; tx = 0.0
-    myx =     2 * xy + 2 * wz;  myy = 1 - 2 * xx - 2 * zz;  myz =     2 * yz + 2 * wx; ty = 0.0
-    mzx =     2 * xz - 2 * wy;  mzy =     2 * yz - 2 * wx;  mzz = 1 - 2 * xx - 2 * yy; tz = 0.0
+    myx =     2 * xy + 2 * wz;  myy = 1 - 2 * xx - 2 * zz;  myz =     2 * yz - 2 * wx; ty = 0.0
+    mzx =     2 * xz - 2 * wy;  mzy =     2 * yz + 2 * wx;  mzz = 1 - 2 * xx - 2 * yy; tz = 0.0
 
     println(this)
     println(super.toString())
