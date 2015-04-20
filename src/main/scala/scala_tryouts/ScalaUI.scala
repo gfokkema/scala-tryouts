@@ -25,6 +25,7 @@ object ScalaUI extends JFXApp {
   private var mouseDeltaX: Double = .0
   private var mouseDeltaY: Double = .0
   private val camera_node = new Camera
+  private val world = new World(camera_node)
   
   stage = new PrimaryStage {
     outer =>
@@ -32,8 +33,8 @@ object ScalaUI extends JFXApp {
       root = new BorderPane {
         title = "ScalaFX Tryouts"
         style = "-fx-background-color: #000000"
-        center = new World(camera_node)
-        bottom = new HUD(outer)
+        center = world
+        bottom = new HUD(world)
       }
     }
     handlemouse(scene())
@@ -53,7 +54,7 @@ object ScalaUI extends JFXApp {
       mousePosX = me.sceneX
       mousePosY = me.sceneY
       val mouse = new Vector3D(mouseOldX - mousePosX, mouseOldY - mousePosY, 0)
-      val axis = mouse.norm % new Vector3D(0, 0, 1)
+      val axis = mouse.norm % Vector3D(0, 0, 1)
       if (me.isPrimaryButtonDown)
         camera_node.q *= Quaternion(axis * sin(mouse.magnitude * .01), cos(mouse.magnitude * .01))
       if (me.isMiddleButtonDown) {

@@ -14,7 +14,7 @@ import scalafx.stage.Stage
 import scalafx.util.converter.NumberStringConverter
 import scalafx.util.converter.NumberStringConverter.sfxNumberStringConverter2jfx
 
-class HUD(outer : Stage) extends HBox {
+class HUD(world: World) extends HBox {
   var x, y, z = new DoubleProperty
   
   children = new HBox(10) {
@@ -36,13 +36,10 @@ class HUD(outer : Stage) extends HBox {
     } ::
     new Button {
       text = "Add molecule"
+      onAction = handle { world.addWater(x.value, y.value, z.value) }
     } ::
     new Region {
       hgrow = Priority.Always
-    } ::
-    new Button {
-      text = "Close the dialog"
-      onAction = handle { outer.close() }
     } :: Nil
   }
 }
